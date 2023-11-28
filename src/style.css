@@ -1,0 +1,144 @@
+:root {
+    --txt-clr: #F8F8f8FF;
+    --main-clr: #FF3E41;
+    --secondary-clr: #2F242C;
+    --pale-clr: #FFDCCC;
+    --highlighted-clr: #007FFF;
+}
+
+* {
+    /*   border: 1px solid red; */
+    overflow-y: hidden;
+}
+
+body {
+    height: 100vh;
+    font-family: Rubik, "sans-serif";
+    display: flex;
+    flex-direction: column;
+    color: var(--txt-clr);
+    background-color: var(--main-clr);
+}
+
+header {
+    font-size: 28px;
+    display: grid;
+    place-content: center;
+    flex-basis: 150px;
+    /*  border-radius: 0px 0px 25px 25px; */
+    background-color: var(--secondary-clr);
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.board {
+    width: 450px;
+    height: 450px;
+    border: 1px solid black;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    background-color: var(--pale-clr);
+    border-radius: 16px;
+}
+
+.board .cell {
+    border: 1px solid black;
+    cursor: crosshair;
+}
+
+#shipPlacementDialog {
+    height: 700px;
+    width: 490px;
+    margin: auto;
+    z-index: 15;
+}
+
+.shipName {
+    text-decoration: underline black 2px;
+}
+
+#shipPlacementDialogContainer {
+    text-align: center;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#shipPlacementDialog button {
+    width: 106px;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 8px;
+    margin: 0px auto;
+    transition: 0.1s ease-in;
+}
+
+#shipPlacementDialog button:hover {
+    transform: scale(1.1);
+}
+
+
+
+.ship {
+    background-color: #343434;
+    z-index: 2;
+    position: relative;
+}
+
+.ship.hit::before,
+.ship.hit::after {
+    content: '';
+    position: absolute;
+    background-color: red;
+}
+
+.ship.hit::before {
+    width: 4px;
+    height: 100%;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ship.hit::after {
+    height: 4px;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.hidden {
+    background-color: var(--pale-clr);
+    z-index: 3;
+}
+
+.highlighted {
+    background-color: var(--highlighted-clr);
+}
+
+.miss {
+    background-color: lightseagreen;
+    z-index: 10;
+    cursor: not-allowed !important;
+
+}
+
+dialog#endGameDialog {
+    margin: 200px auto;
+    height: 300px;
+    width: 433px;
+}
+
+.endGameDialogContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
