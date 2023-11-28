@@ -1,14 +1,19 @@
-const GameBoard = () => {
+const GameBoard = (player = "player") => {
   // 10x10 array: array of 10 filled by ten arrays
   const gameBoard = Array.from({ length: 10 }, () => Array(10).fill(null));
+  let previousBoard = JSON.parse(JSON.stringify(gameBoard));
   // shot register
   let shotRegister = [];
   // ship array
   const shipArray = [];
+  // owner
+  const owner = player;
   // getters
   const getGameBoard = () => gameBoard;
   const getShipArray = () => shipArray;
   const getShotRegister = () => shotRegister;
+  const getOwner = () => owner;
+  const getPreviousBoard = () => previousBoard;
   /// add ship to shipArray
   const addShipToArray = (ship) => {
     shipArray.push(ship);
@@ -19,16 +24,20 @@ const GameBoard = () => {
   // check if the cells are not taken && if the cells are inside the board
   const isAvailable = (x, y, length, isVertical) => {
     let board = getGameBoard();
+    x = parseInt(x, 10);
+    y = parseInt(y, 10);
 
     if (isVertical) {
       for (let i = 0; i < length; i++) {
         if (!isInsideBoard(x + i, y) || board[x + i][y] !== null) {
+          console.log("Unable to place ship");
           return false;
         }
       }
     } else {
       for (let i = 0; i < length; i++) {
         if (!isInsideBoard(x, y + i) || board[x][y + i] !== null) {
+          console.log("Unable to place ship");
           return false;
         }
       }
@@ -37,30 +46,27 @@ const GameBoard = () => {
   };
   // placeShip
   const placeShip = (ship, x, y, isVertical) => {
-    // check if placement is valid, handle collision;
-    // x row , y column
-    /* const newShip = () */
-    if (isAvailable(x, y, ship.getLength(), isVertical)) {
-      if (isVertical) {
-        for (let i = 0; i < ship.getLength(); i++) {
-          if (i === 0) addShipToArray(ship);
+    previousBoard = JSON.parse(JSON.stringify(getGameBoard()));
+    x = parseInt(x, 10);
+    y = parseInt(y, 10);
+    if (isVertical) {
+      for (let i = 0; i < ship.getLength(); i++) {
+        if (i === 0) addShipToArray(ship);
 
-          gameBoard[x + i][y] = ship;
-        }
-      } else {
-        for (let i = 0; i < ship.getLength(); i++) {
-          if (i === 0) addShipToArray(ship);
-          gameBoard[x][y + i] = ship;
-        }
+        gameBoard[x + i][y] = ship;
       }
     } else {
-      console.log("Unable to place ship");
-      return false;
+      for (let i = 0; i < ship.getLength(); i++) {
+        if (i === 0) addShipToArray(ship);
+        gameBoard[x][y + i] = ship;
+      }
     }
   };
   // receive attack
 
   const receiveAttack = (x, y) => {
+    previousBoard = JSON.parse(JSON.stringify(getGameBoard()));
+
     let board = getGameBoard();
     // if shot in register, return and don't do anything
     // if the shot is a miss, add it to the register;
@@ -68,7 +74,7 @@ const GameBoard = () => {
 
     // <=====()=====> //
     if (shotRegister.some((value) => value[0] === x && value[1] === y)) {
-      return;
+      return false;
     }
     if (board[x][y] === null) {
       // shot is a miss
@@ -80,6 +86,7 @@ const GameBoard = () => {
       board[x][y].hit();
       shotRegister.push([x, y]);
     }
+    return true;
   };
   // all ships sunk
   const allShipsSunk = () => {
@@ -88,6 +95,25 @@ const GameBoard = () => {
       console.log(`${ship.getType()} is sunk: ${ship.isSunk()}`);
       return ship.isSunk();
     });
+  };
+  const getCellStatus = (x, y) => {
+    let board = getGameBoard();
+    let shotRegister = getShotRegister();
+
+    const isShotRegistered = shotRegister.some(
+      (registeredShot) => registeredShot[0] === x && registeredShot[1] === y
+    );
+
+    const hasShip = board[x][y] !== null;
+    if (isShotRegistered && hasShip) {
+      return "hit";
+    } else if (isShotRegistered && !hasShip) {
+      return "miss";
+    } else if (!isShotRegistered && hasShip) {
+      return "hasShip";
+    } else {
+      return "untouched";
+    }
   };
   /// print board function
   const printGameBoard = (board = getGameBoard()) => {
@@ -110,6 +136,9 @@ const GameBoard = () => {
     allShipsSunk,
     getShipArray,
     getShotRegister,
+    getOwner,
+    getCellStatus,
+    getPreviousBoard,
   };
 };
 export default GameBoard;
