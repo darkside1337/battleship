@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battleship</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/favicon.png"><script defer src="bundle.js"></script></head>
+
+<body>
+    <header>
+        <h1>Battleship!</h1>
+    </header>
+    <main class="app">
+        <div class="playerSection board"></div>
+        <div class="computerSection board"></div>
+    </main>
+    <dialog id="shipPlacementDialog">
+        <div id="shipPlacementDialogContainer">
+            <h2>Welcome, start the game by placing your ships:</h2>
+            <h3>Place your <span class="shipName">carrier</span></h3>
+            <button id="rotate">Rotate ship</button>
+            <div class="board shipPlacementBoard"></div>
+        </div>
+    </dialog>
+    <dialog id="endGameDialog">
+        <div class="endGameDialogContainer">
+            <h1>The Winner is</h1>
+        </div>
+    </dialog>
+</body>
+
+</html>
